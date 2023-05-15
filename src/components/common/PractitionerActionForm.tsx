@@ -1,5 +1,6 @@
 import * as React from 'react';
 
+import FileUpload from './FileUpload';
 import closeIcon from '../../assets/images/close-icon.png';
 import PractitionerPayload from '../../domain/requests/PractitionerPayload';
 
@@ -90,6 +91,7 @@ const PractitionerActionForm = (props: PractitionerActionFormProps) => {
           <img src={closeIcon} alt="" onClick={handleMenuClose} />
         </div>
         <div className="practitionerActionForm__content">
+          <FileUpload setPractitionerData={setPractitionerData} practitionerData={practitionerData} />
           <div className="disp-flex flex-col flex-space-between">
             <input
               required
