@@ -1,0 +1,23 @@
+.signin {
+    height: 100vh;
+    padding: 10px;
+    background-color: aqua;
+    background: rgb(62,62,244);
+    grid-column: leftgutter-start / rightgutter-end;
+    background: linear-gradient(90deg, rgba(65,152,247,1) 0%, rgba(62,62,244,1) 100%);
+    display: flex;
+    justify-content: flex-end;
+
+
+    &__wrapper {
+        background-color: $color-white;
+        height: 100%;
+        width: 50%;
+        border-radius: 20px;
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        padding: 0 15rem;
+    }
+}
