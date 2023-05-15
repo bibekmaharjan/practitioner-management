@@ -22,7 +22,7 @@ const PractitionerListTable = (props: PractitionerListTableProps) => {
   const token = React.useContext(AuthContext);
   const config = {
     headers: {
-      Authorization: `Bearer ${token}`,
+      'x-access-token': token.token,
     },
   };
 

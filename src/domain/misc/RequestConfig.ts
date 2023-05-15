@@ -1,6 +1,6 @@
 interface RequestConfig {
   headers: {
-    Authorization: string;
+    'x-access-token': string | null;
   };
 }
 

@@ -9,6 +9,7 @@ import Loading from '../components/common/Loading';
 import { AuthContext } from '../context/AuthContext';
 import UserDetail from '../domain/responses/UserDetail';
 import Breadcrumb from '../components/common/Breadcrumb';
+import RequestConfig from '../domain/misc/RequestConfig';
 import { fetchPractitionerDetails } from '../services/practitioner';
 
 const PractitionerProfile = () => {
@@ -19,9 +20,9 @@ const PractitionerProfile = () => {
 
   React.useEffect(() => {
     setIsFetching(true);
-    const config = {
+    const config: RequestConfig = {
       headers: {
-        Authorization: `Bearer ${token}`,
+        'x-access-token': token.token,
       },
     };
 
