@@ -1,0 +1,8 @@
+.header {
+    grid-column: leftgutter-start / rightgutter-end;
+    padding: 1.5rem;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    border-bottom: 1px solid $color-gray;
+}
