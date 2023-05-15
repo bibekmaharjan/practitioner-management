@@ -6,7 +6,7 @@ import { AuthContext } from '../../context/AuthContext';
 import PractitionerListItem from './PractitionerListItem';
 import PractitionerActionForm from './PractitionerActionForm';
 import PractitionerPayload from '../../domain/requests/PractitionerPayload';
-import { addPractitioner, fetchPractitioners } from '../../services/practitioner';
+import { addPractitioner, editPractitioner, fetchPractitioners } from '../../services/practitioner';
 
 interface PractitionerListTableProps {
   isActionMenu: boolean;
@@ -17,6 +17,8 @@ interface PractitionerListTableProps {
 
 const PractitionerListTable = (props: PractitionerListTableProps) => {
   const [isFetching, setIsFetching] = React.useState<boolean>(false);
+  const [editData, setEditData] = React.useState<PractitionerPayload | undefined>(undefined);
+
   const token = React.useContext(AuthContext);
   const config = {
     headers: {
@@ -50,23 +52,47 @@ const PractitionerListTable = (props: PractitionerListTableProps) => {
     );
   };
 
+  const editUserData = (id: number) => {
+    if (props.userData) {
+      const selectedEdit: PractitionerPayload | undefined = props.userData.find(
+        (el: PractitionerPayload) => el.id === id
+      );
+      setEditData(selectedEdit);
+    }
+  };
+
+  const handleUserEdit = (userData: PractitionerPayload, id: number | undefined) => {
+    if (id) {
+      editPractitioner(userData, id, config).then(
+        () => {
+          fetchUserData();
+          toast.success('Practitioner edited successfully');
+        },
+        (e) => {
+          console.log(e);
+          toast.error('Practitioner could not be edited');
+        }
+      );
+    }
+  };
+
   const handleActionMenuClick = (e: any) => {
     e.stopPropagation();
     e.preventDefault();
     props.setIsActionMenu(true);
   };
 
-React.useEffect(() => {
-  fetchUserData();
-}, []);
+  React.useEffect(() => {
+    fetchUserData();
+  }, []);
 
-const sortedData: PractitionerPayload[] = props.userData.sort((a, b) => {
-  if (a.isICUSpecialist === b.isICUSpecialist) {
-    return a.fullName.localeCompare(b.fullName); // if isICUSpecialist is the same, sort by name
-  } else {
-    return b.isICUSpecialist === true ? 1 : -1; // sort isICUSpecialist=true items first
-  }
-});
+  const sortedData: PractitionerPayload[] = props.userData.sort((a, b) => {
+    if (a.isICUSpecialist === b.isICUSpecialist) {
+      return a.fullName.localeCompare(b.fullName); // if isICUSpecialist is the same, sort by name
+    } else {
+      return b.isICUSpecialist === true ? 1 : -1; // sort isICUSpecialist=true items first
+    }
+  });
 
   return (
     <>
@@ -87,12 +113,16 @@ const sortedData: PractitionerPayload[] = props.userData.sort((a, b) => {
               <PractitionerListItem
                 data={data}
                 key={data.id}
+                editUserData={editUserData}
                 handleActionMenuClick={handleActionMenuClick}
               />
             ))}
           </table>
           {props.isActionMenu && (
             <PractitionerActionForm
+              editData={editData}
+              setEditData={setEditData}
+              handleUserEdit={handleUserEdit}
               addUserData={addUserData}
               setIsVisible={props.setIsActionMenu}
             />

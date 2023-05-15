@@ -3,11 +3,13 @@ import { useNavigate } from 'react-router-dom';
 
 import dotsIcon from '../../assets/images/dots-icon.png';
 import { DATETIME_FORMAT, DATE_FORMAT } from '../../constants/date';
+import PractitionerPayload from '../../domain/requests/PractitionerPayload';
 import { formatDate } from '../../utils/datetime';
 
 interface PractitionerListItemProps {
+  data: PractitionerPayload;
+  editUserData: (id: number) => void;
   handleActionMenuClick: (e: any) => void;
-  data: any;
 }
 
 const PractitionerListItem = (props: PractitionerListItemProps) => {
@@ -28,15 +30,17 @@ const PractitionerListItem = (props: PractitionerListItemProps) => {
 
   const handleEditClick = (e: any) => {
     setIsMenu(!isMenu);
-   
+
+    if (data.id) {
+      props.editUserData(data.id);
+    }
+
     props.handleActionMenuClick(e);
   };
 
   const handleDelete = (e: any) => {
     e.stopPropagation();
     e.preventDefault();
-
-   
   };
 
   return (
