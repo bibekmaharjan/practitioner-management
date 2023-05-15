@@ -70,3 +70,18 @@
         }
     }
 }
+
+.status {
+    height: 1.5rem;
+    width: 1.5rem;
+    border-radius: 50%;
+
+    &__false {
+        background-color: #F2451C;
+    }
+
+    &__true {
+        background-color: #43BF57;
+    }
+    
+}
