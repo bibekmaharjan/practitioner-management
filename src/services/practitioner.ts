@@ -38,3 +38,13 @@ export async function editPractitioner(practitionerData: PractitionerPayload, id
 
   return await axios.put(url, formDataToSubmit, reqConfig);
 }
+
+/**
+ * Delete practitioner list.
+ *
+ */
+export async function deletePractitioner(id: number, reqConfig: RequestConfig) {
+  const url = interpolate(config.endpoints.deletePractitioners, { id });
+
+  return await axios.delete(url, reqConfig);
+}

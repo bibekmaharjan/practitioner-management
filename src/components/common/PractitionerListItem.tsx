@@ -9,6 +9,7 @@ import { formatDate } from '../../utils/datetime';
 interface PractitionerListItemProps {
   data: PractitionerPayload;
   editUserData: (id: number) => void;
+  deleteUserData: (id: number) => void;
   handleActionMenuClick: (e: any) => void;
 }
 
@@ -41,6 +42,10 @@ const PractitionerListItem = (props: PractitionerListItemProps) => {
   const handleDelete = (e: any) => {
     e.stopPropagation();
     e.preventDefault();
+
+    if (data.id) {
+      props.deleteUserData(data.id);
+    }
   };
 
   return (
