@@ -1,11 +1,12 @@
 import * as React from 'react';
 import { ToastContainer, toast } from 'react-toastify';
-import { AuthContext } from '../../context/AuthContext';
-import { fetchPractitioners } from '../../services/practitioner';
-import PractitionerPayload from '../../domain/requests/PractitionerPayload';
 
 import Loading from './Loading';
+import { AuthContext } from '../../context/AuthContext';
 import PractitionerListItem from './PractitionerListItem';
+import PractitionerActionForm from './PractitionerActionForm';
+import PractitionerPayload from '../../domain/requests/PractitionerPayload';
+import { addPractitioner, fetchPractitioners } from '../../services/practitioner';
 
 interface PractitionerListTableProps {
   isActionMenu: boolean;
@@ -32,6 +33,19 @@ const PractitionerListTable = (props: PractitionerListTableProps) => {
       },
       (e) => {
         toast.error(e);
+      }
+    );
+  };
+
+  const addUserData = (practitionerData: PractitionerPayload) => {
+    addPractitioner(practitionerData, config).then(
+      () => {
+        fetchUserData();
+        toast.success('Practitioner added successfully');
+      },
+      (e) => {
+        console.log(e);
+        toast.error('Practitioner couldnot be added');
       }
     );
   };
@@ -77,6 +91,12 @@ const sortedData: PractitionerPayload[] = props.userData.sort((a, b) => {
               />
             ))}
           </table>
+          {props.isActionMenu && (
+            <PractitionerActionForm
+              addUserData={addUserData}
+              setIsVisible={props.setIsActionMenu}
+            />
+          )}
         </div>
       )}
       <ToastContainer />

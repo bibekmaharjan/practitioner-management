@@ -1,0 +1,7 @@
+.modal {
+    @include absCenter;
+
+    padding: 1.5rem;
+    background-color: $color-white;
+    box-shadow: 1px 1px 10px -10px rgba(0,0,0,0.67);
+}
