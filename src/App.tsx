@@ -8,6 +8,7 @@ import Signup from './pages/Signup';
 import * as routes from './constants/routes';
 import { AuthContext } from './context/AuthContext';
 import PractitionerList from './pages/PractitionerList';
+import PractitionerProfile from './pages/PractitionerProfile';
 import ProtectedRoute from './components/common/ProtectedRoute';
 
 function App() {
@@ -29,6 +30,7 @@ function App() {
             <Routes>
               <Route path="/" element={<ProtectedRoute />}>
                 <Route path="/" element={<PractitionerList />} />
+                <Route path={routes.PROFILE} element={<PractitionerProfile />} />
               </Route>
               <Route path={routes.SIGNIN} element={<Signin />} />
               <Route path={routes.SIGNUP} element={<Signup />} />

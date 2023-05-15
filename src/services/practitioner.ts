@@ -3,6 +3,7 @@ import axios from 'axios';
 import config from '../config';
 import { interpolate } from '../utils/interpolate';
 import RequestConfig from '../domain/misc/RequestConfig';
+import UserDetailResponse from '../domain/responses/UserDetailResponse';
 import PractitionerPayload from '../domain/requests/PractitionerPayload';
 import PractitionerResponse from '../domain/responses/PractitionerResponse';
 
@@ -47,4 +48,18 @@ export async function deletePractitioner(id: number, reqConfig: RequestConfig) {
   const url = interpolate(config.endpoints.deletePractitioners, { id });
 
   return await axios.delete(url, reqConfig);
+}
+
+/**
+ * Fetch details for practitioner.
+ *
+ * @returns {Promise<UserDetailResponse>}
+ */
+export async function fetchPractitionerDetails(
+  id: string | undefined,
+  reqConfig: RequestConfig
+): Promise<UserDetailResponse> {
+  const url = interpolate(config.endpoints.practitionerDetails, { id });
+
+  return await axios.get(url, reqConfig);
 }
