@@ -1,17 +1,17 @@
-import axios from 'axios';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import config from '../config';
+import http from '../utils/http';
 import { useAuth } from '../hooks/useAuth';
 
 const Signin = () => {
-  const { setToken } = useAuth();
-  const navigate = useNavigate();
-
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
+  
+  const { setToken } = useAuth();
+  const navigate = useNavigate();
 
   const isDisabled = !email || !password || isSubmitting;
 
@@ -19,7 +19,7 @@ const Signin = () => {
     event.preventDefault();
     setIsSubmitting(true);
     try {
-      const response = await axios.post(config.endpoints.signIn, { email, password });
+      const response = await http.post(config.endpoints.signIn, { email, password });
       const { accessToken } = response.data;
 
       setToken(accessToken);
@@ -37,7 +37,7 @@ const Signin = () => {
 
         <input
           className="input__text mb-md"
-          placeholder="YOUR MAIL"
+          placeholder="Your email address"
           id="email"
           type="email"
           value={email}
@@ -45,7 +45,7 @@ const Signin = () => {
         />
         <input
           className="input__text mb-sm"
-          placeholder="YOUR PASSWORD"
+          placeholder="Your password"
           id="password"
           type="password"
           value={password}
