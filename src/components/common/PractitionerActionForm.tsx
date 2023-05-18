@@ -19,31 +19,31 @@ const PractitionerActionForm = (props: PractitionerActionFormProps) => {
   const [isSubmitting, setIsSubmitting] = React.useState(false);
   const [isDisabled, setIsDisabled] = React.useState(false);
 
-  const initialData: PractitionerPayload = React.useMemo (() => {
-    return  {
-        dob: '',
-        city: '',
-        email: '',
-        gender: '',
-        status: '',
-        address: '',
-        contact: '',
-        zipcode: '',
-        endTime: '',
-        fullName: '',
-        userImg: null,
-        startTime: '',
-        allergies: [],
-        workingDays: 0,
-        isICUSpecialist: false,
-      }}, [])
+  const initialData: PractitionerPayload = React.useMemo(() => {
+    return {
+      dob: '',
+      city: '',
+      email: '',
+      gender: '',
+      status: '',
+      address: '',
+      contact: '',
+      zipcode: '',
+      endTime: '',
+      fullName: '',
+      userImg: null,
+      startTime: '',
+      allergies: [],
+      workingDays: 0,
+      isICUSpecialist: false,
+    };
+  }, []);
 
   const [practitionerData, setPractitionerData] = React.useState(initialData);
   const [selectedAllergies, setSelectedAllergies] = React.useState<string[]>([]);
 
-  
   React.useEffect(() => {
-    setPractitionerData({...practitionerData, allergies: selectedAllergies})
+    setPractitionerData({ ...practitionerData, allergies: selectedAllergies });
   }, [selectedAllergies]);
 
   const handleAllergiesChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -56,13 +56,8 @@ const PractitionerActionForm = (props: PractitionerActionFormProps) => {
   };
 
   React.useEffect(() => {
-    practitionerData === initialData ?
-      setIsDisabled(true)
-    :
-      setIsDisabled(false);
-    
-  },[practitionerData, initialData])
-
+    practitionerData === initialData ? setIsDisabled(true) : setIsDisabled(false);
+  }, [practitionerData, initialData]);
 
   const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const name = e.target.name;
@@ -75,7 +70,6 @@ const PractitionerActionForm = (props: PractitionerActionFormProps) => {
   };
 
   const handleSubmit = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-
     setIsSubmitting(true);
 
     props.addUserData(practitionerData);
@@ -217,7 +211,7 @@ const PractitionerActionForm = (props: PractitionerActionFormProps) => {
                 <input
                   type="checkbox"
                   name="pollen"
-                  className= "mr-sm"
+                  className="mr-sm"
                   onChange={handleAllergiesChange}
                   checked={selectedAllergies.includes('pollen')}
                 />
@@ -227,7 +221,7 @@ const PractitionerActionForm = (props: PractitionerActionFormProps) => {
                 <input
                   type="checkbox"
                   name="Mould"
-                  className= "mr-sm"
+                  className="mr-sm"
                   onChange={handleAllergiesChange}
                   checked={selectedAllergies.includes('Mould')}
                 />
@@ -237,7 +231,7 @@ const PractitionerActionForm = (props: PractitionerActionFormProps) => {
                 <input
                   type="checkbox"
                   name="Food Allergies"
-                  className= "mr-sm"
+                  className="mr-sm"
                   onChange={handleAllergiesChange}
                   checked={selectedAllergies.includes('Food Allergies')}
                 />
@@ -247,7 +241,7 @@ const PractitionerActionForm = (props: PractitionerActionFormProps) => {
                 <input
                   type="checkbox"
                   name="Cockroaches"
-                  className= "mr-sm"
+                  className="mr-sm"
                   onChange={handleAllergiesChange}
                   checked={selectedAllergies.includes('Cockroaches')}
                 />
@@ -257,7 +251,7 @@ const PractitionerActionForm = (props: PractitionerActionFormProps) => {
                 <input
                   type="checkbox"
                   name="Insect stings"
-                  className= "mr-sm"
+                  className="mr-sm"
                   onChange={handleAllergiesChange}
                   checked={selectedAllergies.includes('Insect stings')}
                 />
@@ -267,7 +261,7 @@ const PractitionerActionForm = (props: PractitionerActionFormProps) => {
                 <input
                   type="checkbox"
                   name="Dust mites"
-                  className= "mr-sm"
+                  className="mr-sm"
                   onChange={handleAllergiesChange}
                   checked={selectedAllergies.includes('Dust mites')}
                 />
