@@ -6,13 +6,14 @@ import { AuthContext } from '../../context/AuthContext';
 import PractitionerListItem from './PractitionerListItem';
 import PractitionerActionForm from './PractitionerActionForm';
 import PractitionerPayload from '../../domain/requests/PractitionerPayload';
+import PractitionerResponse from '../../domain/responses/PractitionerResponse';
 import { addPractitioner, editPractitioner, fetchPractitioners } from '../../services/practitioner';
 
 interface PractitionerListTableProps {
   isActionMenu: boolean;
   userData: PractitionerPayload[];
-  setIsActionMenu: (e: any) => void;
-  setUserData: (data: any) => void;
+  setIsActionMenu: (isMenuVisible: boolean) => void;
+  setUserData: (data: PractitionerPayload) => void;
 }
 
 const PractitionerListTable = (props: PractitionerListTableProps) => {
@@ -29,7 +30,7 @@ const PractitionerListTable = (props: PractitionerListTableProps) => {
   const fetchUserData = () => {
     setIsFetching(true);
     fetchPractitioners(config).then(
-      (d) => {
+      (d: PractitionerResponse) => {
         props.setUserData(d.data);
         setIsFetching(false);
       },
@@ -76,7 +77,7 @@ const PractitionerListTable = (props: PractitionerListTableProps) => {
     }
   };
 
-  const handleActionMenuClick = (e: any) => {
+  const handleActionMenuClick = (e: React.MouseEvent<HTMLSpanElement>) => {
     e.stopPropagation();
     e.preventDefault();
     props.setIsActionMenu(true);
@@ -109,7 +110,7 @@ const PractitionerListTable = (props: PractitionerListTableProps) => {
               <th className="text__label-muted">End time</th>
               <th className="text__label-muted">ICU Specialist</th>
             </tr>
-            {sortedData.map((data: any) => (
+            {sortedData.map((data: PractitionerPayload) => (
               <PractitionerListItem
                 data={data}
                 key={data.id}

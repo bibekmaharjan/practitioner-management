@@ -14,7 +14,7 @@ const Header = () => {
     <>
       <header className="header">
         <div className="header__wrapper">
-          <img src={headerIcon} alt="" className="header__icon mr-sm" />
+          <img src={headerIcon} alt="header-icon" className="header__icon mr-sm" />
           <span className="text__title-lg">Practitioner</span>
         </div>
         <div className="btn__wrapper">
