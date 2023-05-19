@@ -2,7 +2,6 @@ import * as React from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 
 import Loading from './Loading';
-import { AuthContext } from '../../context/AuthContext';
 import PractitionerListItem from './PractitionerListItem';
 import { fetchPractitioners } from '../../services/practitioner';
 import PractitionerPayload from '../../domain/requests/PractitionerPayload';
@@ -12,22 +11,16 @@ interface PractitionerListTableProps {
   isActionMenu: boolean;
   userData: PractitionerPayload[];
   setIsActionMenu: (isMenuVisible: boolean) => void;
-  setUserData: (data: PractitionerPayload) => void;
+  setUserData: (data: PractitionerPayload[]) => void;
 }
 
 const PractitionerListTable = (props: PractitionerListTableProps) => {
   const [isFetching, setIsFetching] = React.useState<boolean>(false);
-  const token = React.useContext(AuthContext);
-  const config = {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  };
 
   const fetchUserData = () => {
     setIsFetching(true);
-    fetchPractitioners(config).then(
-      (d:PractitionerResponse) => {
+    fetchPractitioners().then(
+      (d: PractitionerResponse) => {
         props.setUserData(d.data);
         setIsFetching(false);
       },
@@ -43,17 +36,17 @@ const PractitionerListTable = (props: PractitionerListTableProps) => {
     props.setIsActionMenu(true);
   };
 
-React.useEffect(() => {
-  fetchUserData();
-}, []);
+  React.useEffect(() => {
+    fetchUserData();
+  }, []);
 
-const sortedData: PractitionerPayload[] = props.userData.sort((a, b) => {
-  if (a.isICUSpecialist === b.isICUSpecialist) {
-    return a.fullName.localeCompare(b.fullName); // if isICUSpecialist is the same, sort by name
-  } else {
-    return b.isICUSpecialist === true ? 1 : -1; // sort isICUSpecialist=true items first
-  }
-});
+  const sortedData: PractitionerPayload[] = props.userData.sort((a, b) => {
+    if (a.isICUSpecialist === b.isICUSpecialist) {
+      return a.fullName.localeCompare(b.fullName); // if isICUSpecialist is the same, sort by name
+    } else {
+      return b.isICUSpecialist ? 1 : -1; // sort isICUSpecialist=true items first
+    }
+  });
 
   return (
     <>
@@ -71,11 +64,7 @@ const sortedData: PractitionerPayload[] = props.userData.sort((a, b) => {
               <th className="text__label-muted">ICU Specialist</th>
             </tr>
             {sortedData.map((data: PractitionerPayload) => (
-              <PractitionerListItem
-                data={data}
-                key={data.id}
-                handleActionMenuClick={handleActionMenuClick}
-              />
+              <PractitionerListItem data={data} key={data.id} handleActionMenuClick={handleActionMenuClick} />
             ))}
           </table>
         </div>

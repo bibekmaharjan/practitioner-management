@@ -1,7 +1,5 @@
-import axios from 'axios';
-
 import config from '../config';
-import RequestConfig from '../domain/misc/RequestConfig';
+import http from '../utils/http';
 import PractitionerResponse from '../domain/responses/PractitionerResponse';
 
 /**
@@ -9,6 +7,6 @@ import PractitionerResponse from '../domain/responses/PractitionerResponse';
  *
  * @returns {Promise<PractitionerResponse>}
  */
- export async function fetchPractitioners(reqConfig: RequestConfig): Promise<PractitionerResponse> {
-    return await axios.get(config.endpoints.practitioners, reqConfig);
-  }
+export async function fetchPractitioners(): Promise<PractitionerResponse> {
+  return await http.get(config.endpoints.practitioners);
+}
