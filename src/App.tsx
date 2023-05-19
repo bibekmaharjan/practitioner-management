@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import 'react-toastify/dist/ReactToastify.css';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
@@ -14,7 +14,7 @@ import ProtectedRoute from './components/common/ProtectedRoute';
 function App() {
   const [token, setToken] = React.useState<string | null>(localStorageUtil.getItem('token'));
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (token) {
       localStorageUtil.setItem('token', token);
     } else {
