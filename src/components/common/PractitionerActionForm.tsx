@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useEffect } from 'react';
 
 import closeIcon from '../../assets/images/close-icon.png';
 import PractitionerPayload from '../../domain/requests/PractitionerPayload';
@@ -41,7 +41,7 @@ const PractitionerActionForm = (props: PractitionerActionFormProps) => {
   const [practitionerData, setPractitionerData] = React.useState(initialData);
   const [selectedAllergies, setSelectedAllergies] = React.useState<string[]>([]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     setPractitionerData({ ...practitionerData, allergies: selectedAllergies });
   }, [selectedAllergies]);
 
@@ -54,8 +54,8 @@ const PractitionerActionForm = (props: PractitionerActionFormProps) => {
     );
   };
 
-  React.useEffect(() => {
-    practitionerData === initialData ? setIsDisabled(true) : setIsDisabled(false);
+  useEffect(() => {
+    setIsDisabled(practitionerData === initialData);
   }, [practitionerData, initialData]);
 
   const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
