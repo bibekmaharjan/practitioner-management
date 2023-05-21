@@ -1,23 +1,23 @@
-import * as React from 'react';
 import AvatarEditor from 'react-avatar-editor';
+import React, { ChangeEvent, Dispatch, SetStateAction, useState, useRef } from 'react';
 
 import imgPlaceholder from '../../assets/images/userPlaceholder.jpg';
 import PractitionerPayload from '../../domain/requests/PractitionerPayload';
 
 interface FileUploadProps {
   practitionerData: PractitionerPayload;
-  setPractitionerData: React.Dispatch<React.SetStateAction<PractitionerPayload>>;
+  setPractitionerData: Dispatch<SetStateAction<PractitionerPayload>>;
 }
 
-const FileUpload = (props: FileUploadProps) => {
-  const [image, setImage] = React.useState('');
-  const [error, setError] = React.useState('');
-  const [fileName, setFileName] = React.useState('');
-  const [editor, setEditor] = React.useState<any>(null);
-  const [croppedImage, setCroppedImage] = React.useState('');
-  const [showCropper, setShowCropper] = React.useState(false);
+const FileUpload: React.FC<FileUploadProps> = ({ practitionerData, setPractitionerData }) => {
+  const [image, setImage] = useState('');
+  const [error, setError] = useState('');
+  const [fileName, setFileName] = useState('');
+  const editorRef = useRef<AvatarEditor | null>(null);
+  const [croppedImage, setCroppedImage] = useState('');
+  const [showCropper, setShowCropper] = useState(false);
 
-  const onFileChange = (event: any) => {
+  const onFileChange = (event: ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files.length > 0) {
       setShowCropper(true);
       const file = event.target.files[0];
@@ -34,25 +34,24 @@ const FileUpload = (props: FileUploadProps) => {
     const arr: any = base64String.split(',');
     const mime = arr[0].match(/:(.*?);/)[1];
     const bstr = atob(arr[1]);
-    let n = bstr.length;
-    const u8arr = new Uint8Array(n);
-    while (n--) {
-      u8arr[n] = bstr.charCodeAt(n);
+    const u8arr = new Uint8Array(bstr.length);
+    for (let i = 0; i < bstr.length; i++) {
+      u8arr[i] = bstr.charCodeAt(i);
     }
     return new File([u8arr], fileName, { type: mime });
   };
 
   const onCrop = () => {
-    if (!editor) {
+    if (!editorRef.current) {
       setError('Editor not initialized');
       return;
     }
     setShowCropper(false);
-    const canvas = editor.getImageScaledToCanvas().toDataURL();
+    const canvas = editorRef.current.getImageScaledToCanvas().toDataURL();
 
     setCroppedImage(canvas);
     const file = base64StringToFile(canvas, fileName);
-    props.setPractitionerData({ ...props.practitionerData, userImg: file });
+    setPractitionerData({ ...practitionerData, userImg: file });
   };
 
   return (
@@ -65,13 +64,13 @@ const FileUpload = (props: FileUploadProps) => {
             className="practitionerActionForm__img"
           />
 
-          <input type="file" onChange={onFileChange} />
+          <input type="file" onChange={onFileChange} accept="image/png, image/jpeg" />
         </div>
 
         {image && showCropper && (
           <div className="image__container">
             <AvatarEditor
-              ref={(ref) => setEditor(ref)}
+              ref={editorRef}
               image={image}
               width={250}
               height={250}
