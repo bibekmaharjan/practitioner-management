@@ -1,27 +1,25 @@
 .image {
+  &__container {
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    z-index: 999;
+    top: 0;
+    left: 0;
+    background-color: rgba($color: #000000, $alpha: 0.4);
+  }
 
-    &__container {
-        height: 100%;
-        width: 100%;
-        position:absolute;
-        z-index: 999;
-        top: 0;
-        left: 0;
-        background-color: rgba($color: #000000, $alpha: .4);
-    }
+  &__cropper {
+    @include absCenter;
+  }
 
-    &__cropper {
-        @include absCenter;
-    }
+  &__cropBtn {
+    position: absolute;
 
-    &__cropBtn {
-        position: absolute;
-
-        position: absolute;
+    position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, 400%);
     cursor: pointer;
-        
-    }
+  }
 }

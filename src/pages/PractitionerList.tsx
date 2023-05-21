@@ -1,11 +1,12 @@
 import * as React from 'react';
 
 import Header from '../components/layout/Header';
+import PractitionerPayload from '../domain/requests/PractitionerPayload';
 import PractitionerListTable from '../components/common/PractitionerListTable';
 
 const PractitionerList = () => {
-  const [userData, setUserData] = React.useState<any[]>([]);
-  const [isActionMenu, setIsActionMenu] = React.useState(false);
+  const [isActionMenu, setIsActionMenu] = React.useState<boolean>(false);
+  const [userData, setUserData] = React.useState<PractitionerPayload[]>([]);
 
   return (
     <>
