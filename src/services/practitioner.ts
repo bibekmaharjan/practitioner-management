@@ -53,9 +53,7 @@ export async function deletePractitioner(id: number) {
  *
  * @returns {Promise<UserDetailResponse>}
  */
-export async function fetchPractitionerDetails(
-  id: string | undefined
-): Promise<UserDetailResponse> {
+export async function fetchPractitionerDetails(id: string | undefined): Promise<UserDetailResponse> {
   const url = interpolate(config.endpoints.practitionerDetails, { id });
 
   return await http.get(url);

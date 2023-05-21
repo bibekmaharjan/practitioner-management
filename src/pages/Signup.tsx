@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 
 import config from '../config';
 import http from '../utils/http';
+import signupBg from '../assets/images/signup.png';
 
 const Signup = () => {
   const [email, setEmail] = useState('');
@@ -28,8 +29,9 @@ const Signup = () => {
   };
 
   return (
-    <div className="signin">
-      <div className="signin__wrapper">
+    <div className="signup">
+      <img src={signupBg} alt="signup-background" className="signup__image" />
+      <div className="signup__wrapper">
         <div className="text__title-lg--color mb-lg">Welcome!</div>
 
         <input
