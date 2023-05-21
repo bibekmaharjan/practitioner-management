@@ -1,64 +1,63 @@
 .practitionerList {
-    grid-column: leftgutter-start / rightgutter-end;
-    
-    
-    &__menu {
-        padding: 1.5rem;
-        border-bottom: 1px solid $color-gray;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
+  grid-column: leftgutter-start / rightgutter-end;
 
-        &-wrapper {
-            display: flex;
-            align-items: center;
-        }
+  &__menu {
+    padding: 1.5rem;
+    border-bottom: 1px solid $color-gray;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 
-        &-item {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            width: max-content;
-            
-            &:not(:last-child) {
-                border-right: 1px solid $color-gray;
-            }
-
-            label {
-                white-space: nowrap;
-            }
-
-            &--select{
-                display: grid;
-                width: 100%;
-                align-items: center;
-                border-radius: 0.25em;
-                padding: 0.25em 0.5em;
-                background-color: #fff;
-                grid-template-areas: "select";
-
-                &::after {
-                    content: "";
-                    width: 1rem;
-                    height: 1rem;
-                    grid-area: select;
-                    justify-self: end;
-                    background-color: $color-gray;
-                    clip-path: polygon(100% 0%, 0 0%, 50% 100%);
-                    }
-            }
-
-            select {
-                border: none;
-                margin: 0;
-                width: 100%;
-                outline: none;
-                cursor: pointer;
-                appearance: none;
-                grid-area: select;
-                padding: 0 1em 0 0;
-                background-color: transparent;       
-            }
-        }   
+    &-wrapper {
+      display: flex;
+      align-items: center;
     }
+
+    &-item {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: max-content;
+
+      &:not(:last-child) {
+        border-right: 1px solid $color-gray;
+      }
+
+      label {
+        white-space: nowrap;
+      }
+
+      &--select {
+        display: grid;
+        width: 100%;
+        align-items: center;
+        border-radius: 0.25em;
+        padding: 0.25em 0.5em;
+        background-color: #fff;
+        grid-template-areas: 'select';
+
+        &::after {
+          content: '';
+          width: 1rem;
+          height: 1rem;
+          grid-area: select;
+          justify-self: end;
+          background-color: $color-gray;
+          clip-path: polygon(100% 0%, 0 0%, 50% 100%);
+        }
+      }
+
+      select {
+        border: none;
+        margin: 0;
+        width: 100%;
+        outline: none;
+        cursor: pointer;
+        appearance: none;
+        grid-area: select;
+        padding: 0 1em 0 0;
+        background-color: transparent;
+      }
+    }
+  }
 }

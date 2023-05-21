@@ -1,74 +1,73 @@
 .disp-flex {
-    display: flex;
+  display: flex;
 }
 
 .flex-col {
-    flex-direction: column;
+  flex-direction: column;
 }
 
 .flex-align-end {
-    align-items: flex-end;
+  align-items: flex-end;
 }
 
 .flex-space-between {
-    justify-content: space-between;
+  justify-content: space-between;
 }
 
 .flex-justify-end {
-    justify-content: flex-end;
+  justify-content: flex-end;
 }
 
 .flex-center {
-    justify-content: center;
-    align-items: center;
+  justify-content: center;
+  align-items: center;
 }
 
 .flex-start {
-    justify-content: flex-start;
-    align-items: center;
+  justify-content: flex-start;
+  align-items: center;
 }
 
 .no-wrap {
-    white-space: nowrap;
-
+  white-space: nowrap;
 }
 
 .mr-md {
-    margin-right: 2rem;
+  margin-right: 2rem;
 }
 
 .pr-md {
-    padding-right: 2rem;
+  padding-right: 2rem;
 }
 
 .mr-sm {
-    margin-right: 1rem;
+  margin-right: 1rem;
 }
 
 .ml-sm {
-    margin-left: 1rem;
+  margin-left: 1rem;
 }
 
 .mt-sm {
-    margin-top: 1rem;
+  margin-top: 1rem;
 }
 
 .mb-lg {
-    margin-bottom: 3rem;
+  margin-bottom: 3rem;
 }
 
 .mb-md {
-    margin-bottom: 2rem;
+  margin-bottom: 2rem;
 }
 
 .mb-sm {
-    margin-bottom: 1rem;
+  margin-bottom: 1rem;
 }
 
 .mb-tn {
-    margin-bottom: .7rem;
+  margin-bottom: 0.7rem;
 }
 
 .cursor-pointer {
-    cursor: pointer;
+  cursor: pointer;
 }

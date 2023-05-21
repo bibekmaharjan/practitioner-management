@@ -6,27 +6,19 @@ import { formatDate } from '../utils/datetime';
 import { DATE_FORMAT } from '../constants/date';
 import Header from '../components/layout/Header';
 import Loading from '../components/common/Loading';
-import { AuthContext } from '../context/AuthContext';
 import UserDetail from '../domain/responses/UserDetail';
 import Breadcrumb from '../components/common/Breadcrumb';
-import RequestConfig from '../domain/misc/RequestConfig';
 import { fetchPractitionerDetails } from '../services/practitioner';
 
 const PractitionerProfile = () => {
   const { id } = useParams();
   const [userData, setUserData] = React.useState<UserDetail>();
   const [isFetching, setIsFetching] = React.useState<boolean>(false);
-  const token = React.useContext(AuthContext);
 
   React.useEffect(() => {
     setIsFetching(true);
-    const config: RequestConfig = {
-      headers: {
-        'x-access-token': token.token,
-      },
-    };
 
-    fetchPractitionerDetails(id, config).then(
+    fetchPractitionerDetails(id).then(
       (d) => {
         setUserData(d.data);
         setIsFetching(false);

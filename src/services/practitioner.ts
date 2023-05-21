@@ -1,8 +1,6 @@
-import axios from 'axios';
-
 import config from '../config';
+import http from '../utils/http';
 import { interpolate } from '../utils/interpolate';
-import RequestConfig from '../domain/misc/RequestConfig';
 import UserDetailResponse from '../domain/responses/UserDetailResponse';
 import PractitionerPayload from '../domain/requests/PractitionerPayload';
 import PractitionerResponse from '../domain/responses/PractitionerResponse';
@@ -12,42 +10,42 @@ import PractitionerResponse from '../domain/responses/PractitionerResponse';
  *
  * @returns {Promise<PractitionerResponse>}
  */
-export async function fetchPractitioners(reqConfig: RequestConfig): Promise<PractitionerResponse> {
-  return await axios.get(config.endpoints.practitioners, reqConfig);
+export async function fetchPractitioners(): Promise<PractitionerResponse> {
+  return await http.get(config.endpoints.practitioners);
 }
 
 /**
  * Add practitioner to list.
  *
  */
-export async function addPractitioner(practitionerData: PractitionerPayload, reqConfig: RequestConfig) {
+export async function addPractitioner(practitionerData: PractitionerPayload) {
   const formDataToSubmit = new FormData();
   Object.entries(practitionerData).forEach(([key, value]) => formDataToSubmit.append(key, value));
 
-  return await axios.post(config.endpoints.practitioners, formDataToSubmit, reqConfig);
+  return await http.post(config.endpoints.practitioners, formDataToSubmit);
 }
 
 /**
  * Edit practitioner to list.
  *
  */
-export async function editPractitioner(practitionerData: PractitionerPayload, id: number, reqConfig: RequestConfig) {
+export async function editPractitioner(practitionerData: PractitionerPayload, id: number) {
   const formDataToSubmit = new FormData();
   Object.entries(practitionerData).forEach(([key, value]) => formDataToSubmit.append(key, value));
 
   const url = interpolate(config.endpoints.editPractitioners, { id });
 
-  return await axios.put(url, formDataToSubmit, reqConfig);
+  return await http.put(url, formDataToSubmit);
 }
 
 /**
  * Delete practitioner list.
  *
  */
-export async function deletePractitioner(id: number, reqConfig: RequestConfig) {
+export async function deletePractitioner(id: number) {
   const url = interpolate(config.endpoints.deletePractitioners, { id });
 
-  return await axios.delete(url, reqConfig);
+  return await http.delete(url);
 }
 
 /**
@@ -56,10 +54,9 @@ export async function deletePractitioner(id: number, reqConfig: RequestConfig) {
  * @returns {Promise<UserDetailResponse>}
  */
 export async function fetchPractitionerDetails(
-  id: string | undefined,
-  reqConfig: RequestConfig
+  id: string | undefined
 ): Promise<UserDetailResponse> {
   const url = interpolate(config.endpoints.practitionerDetails, { id });
 
-  return await axios.get(url, reqConfig);
+  return await http.get(url);
 }

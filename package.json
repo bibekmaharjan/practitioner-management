@@ -28,7 +28,8 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "prettify": "prettier --single-quote --parser typescript --print-width 120 --write {src,test}/**/*.{ts,js,tsx}"
+    "prettify-scss": "prettier --single-quote --print-width 120 --end-of-line auto --write {src,test}/**/*.scss",
+    "prettify": "prettier --single-quote --parser typescript --print-width 120 --end-of-line auto --write {src,test}/**/*.{ts,js,tsx}"
   },
   "eslintConfig": {
     "extends": [

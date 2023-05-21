@@ -1,35 +1,28 @@
-import * as React from 'react';
+import React, { useEffect } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 
 import Loading from './Loading';
-import { AuthContext } from '../../context/AuthContext';
 import PractitionerListItem from './PractitionerListItem';
 import PractitionerActionForm from './PractitionerActionForm';
 import PractitionerPayload from '../../domain/requests/PractitionerPayload';
+import PractitionerResponse from '../../domain/responses/PractitionerResponse';
 import { addPractitioner, deletePractitioner, editPractitioner, fetchPractitioners } from '../../services/practitioner';
 
 interface PractitionerListTableProps {
   isActionMenu: boolean;
   userData: PractitionerPayload[];
-  setIsActionMenu: (e: any) => void;
-  setUserData: (data: any) => void;
+  setIsActionMenu: (isMenuVisible: boolean) => void;
+  setUserData: (data: PractitionerPayload[]) => void;
 }
 
 const PractitionerListTable = (props: PractitionerListTableProps) => {
   const [isFetching, setIsFetching] = React.useState<boolean>(false);
   const [editData, setEditData] = React.useState<PractitionerPayload | undefined>(undefined);
 
-  const token = React.useContext(AuthContext);
-  const config = {
-    headers: {
-      'x-access-token': token.token,
-    },
-  };
-
   const fetchUserData = () => {
     setIsFetching(true);
-    fetchPractitioners(config).then(
-      (d) => {
+    fetchPractitioners().then(
+      (d: PractitionerResponse) => {
         props.setUserData(d.data);
         setIsFetching(false);
       },
@@ -40,7 +33,7 @@ const PractitionerListTable = (props: PractitionerListTableProps) => {
   };
 
   const addUserData = (practitionerData: PractitionerPayload) => {
-    addPractitioner(practitionerData, config).then(
+    addPractitioner(practitionerData).then(
       () => {
         fetchUserData();
         toast.success('Practitioner added successfully');
@@ -62,7 +55,7 @@ const PractitionerListTable = (props: PractitionerListTableProps) => {
   };
 
   const deleteUserData = (id: number) => {
-    deletePractitioner(id, config).then(
+    deletePractitioner(id).then(
       () => {
         fetchUserData();
         toast.success('Practitioner deleted successfully');
@@ -76,7 +69,7 @@ const PractitionerListTable = (props: PractitionerListTableProps) => {
 
   const handleUserEdit = (userData: PractitionerPayload, id: number | undefined) => {
     if (id) {
-      editPractitioner(userData, id, config).then(
+      editPractitioner(userData, id).then(
         () => {
           fetchUserData();
           toast.success('Practitioner edited successfully');
@@ -89,13 +82,13 @@ const PractitionerListTable = (props: PractitionerListTableProps) => {
     }
   };
 
-  const handleActionMenuClick = (e: any) => {
+  const handleActionMenuClick = (e: React.MouseEvent<HTMLSpanElement>) => {
     e.stopPropagation();
     e.preventDefault();
     props.setIsActionMenu(true);
   };
 
-  React.useEffect(() => {
+  useEffect(() => {
     fetchUserData();
   }, []);
 
@@ -103,7 +96,7 @@ const PractitionerListTable = (props: PractitionerListTableProps) => {
     if (a.isICUSpecialist === b.isICUSpecialist) {
       return a.fullName.localeCompare(b.fullName); // if isICUSpecialist is the same, sort by name
     } else {
-      return b.isICUSpecialist === true ? 1 : -1; // sort isICUSpecialist=true items first
+      return b.isICUSpecialist ? 1 : -1; // sort isICUSpecialist=true items first
     }
   });
 
@@ -122,7 +115,7 @@ const PractitionerListTable = (props: PractitionerListTableProps) => {
               <th className="text__label-muted">End time</th>
               <th className="text__label-muted">ICU Specialist</th>
             </tr>
-            {sortedData.map((data: any) => (
+            {sortedData.map((data: PractitionerPayload) => (
               <PractitionerListItem
                 data={data}
                 key={data.id}

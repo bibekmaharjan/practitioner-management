@@ -1,50 +1,49 @@
 import * as React from 'react';
 import { useNavigate } from 'react-router-dom';
 
+import { formatDate } from '../../utils/datetime';
 import dotsIcon from '../../assets/images/dots-icon.png';
 import { DATETIME_FORMAT, DATE_FORMAT } from '../../constants/date';
 import PractitionerPayload from '../../domain/requests/PractitionerPayload';
-import { formatDate } from '../../utils/datetime';
 
 interface PractitionerListItemProps {
   data: PractitionerPayload;
   editUserData: (id: number) => void;
   deleteUserData: (id: number) => void;
-  handleActionMenuClick: (e: any) => void;
+  handleActionMenuClick: (e: React.MouseEvent<HTMLSpanElement>) => void;
 }
 
-const PractitionerListItem = (props: PractitionerListItemProps) => {
-  const { data } = props;
+const PractitionerListItem: React.FC<PractitionerListItemProps> = ({ data, editUserData, handleActionMenuClick, deleteUserData }) => {
+  const [isMenu, setIsMenu] = React.useState(false);
 
   const navigate = useNavigate();
-  const [isMenu, setIsMenu] = React.useState(false);
 
   const onRowClick = () => {
     navigate(`/profile/${data.id}`);
   };
 
-  const handleMenuClick = (e: any) => {
+  const handleMenuClick = (e: React.MouseEvent<HTMLSpanElement>) => {
     e.stopPropagation();
     e.preventDefault();
     setIsMenu(!isMenu);
   };
 
-  const handleEditClick = (e: any) => {
+  const handleEditClick = (e: React.MouseEvent<HTMLSpanElement>) => {
     setIsMenu(!isMenu);
 
     if (data.id) {
-      props.editUserData(data.id);
+      editUserData(data.id);
     }
 
-    props.handleActionMenuClick(e);
+    handleActionMenuClick(e);
   };
 
-  const handleDelete = (e: any) => {
+  const handleDelete = (e: React.MouseEvent<HTMLSpanElement>) => {
     e.stopPropagation();
     e.preventDefault();
 
     if (data.id) {
-      props.deleteUserData(data.id);
+      deleteUserData(data.id);
     }
   };
 
@@ -52,7 +51,7 @@ const PractitionerListItem = (props: PractitionerListItemProps) => {
     <>
       <tr className="practitionerListTable__row" onClick={onRowClick}>
         <td className="practitionerListTable__userInfo">
-          <img src={data.userImg as string} alt="" className="practitionerListTable__userInfo-img" />
+          <img src={data.userImg as string} alt="user-profile" className="practitionerListTable__userInfo-img" />
           <div className="practitionerListTable__userInfo-wrapper">
             <span className="text__title-med">{data.fullName}</span>
             <span className="text__sm--mute">{data.email}</span>
@@ -80,7 +79,12 @@ const PractitionerListItem = (props: PractitionerListItemProps) => {
           </span>
         </td>
         <td className="practitionerListTable__userInfo-dotsMenu--container">
-          <img src={dotsIcon} onClick={handleMenuClick} className="practitionerListTable__userInfo-dotsIcon" alt="" />
+          <img
+            src={dotsIcon}
+            onClick={handleMenuClick}
+            className="practitionerListTable__userInfo-dotsIcon"
+            alt="menu-icon"
+          />
           {isMenu && (
             <div className="practitionerListTable__userInfo-dotsMenu">
               <span className="text__label-muted" onClick={(e) => handleEditClick(e)}>
