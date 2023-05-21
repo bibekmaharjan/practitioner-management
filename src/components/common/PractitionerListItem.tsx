@@ -12,7 +12,7 @@ interface PractitionerListItemProps {
   handleActionMenuClick: (e: React.MouseEvent<HTMLSpanElement>) => void;
 }
 
-const PractitionerListItem = ({ data, handleActionMenuClick, editUserData }: PractitionerListItemProps) => {
+const PractitionerListItem: React.FC<PractitionerListItemProps> = ({ data, editUserData, handleActionMenuClick }) => {
   const [isMenu, setIsMenu] = React.useState(false);
 
   const navigate = useNavigate();
