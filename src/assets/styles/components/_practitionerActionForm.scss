@@ -59,4 +59,9 @@
       white-space: nowrap;
     }
   }
+
+  &__gender-wrapper {
+    display: flex;
+    align-items: center;
+  }
 }
