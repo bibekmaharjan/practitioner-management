@@ -1,3 +1,4 @@
+import { toast } from 'react-toastify';
 import React, { useEffect } from 'react';
 
 import FileUpload from './FileUpload';
@@ -77,6 +78,11 @@ const PractitionerActionForm = (props: PractitionerActionFormProps) => {
   };
 
   const handleSubmit = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    // Validate inputs before submitting
+    if (!validateInputs()) {
+      return;
+    }
+
     if (props.editData === practitionerData) {
       handleMenuClose(e);
       props.setEditData(undefined);
@@ -90,6 +96,30 @@ const PractitionerActionForm = (props: PractitionerActionFormProps) => {
     setIsSubmitting(false);
     props.setEditData(undefined);
     handleMenuClose(e);
+  };
+
+  const validateInputs = (): boolean => {
+    const requiredFields: Array<keyof PractitionerPayload> = [
+      'fullName',
+      'email',
+      'contact',
+      'city',
+      'gender',
+      'zipcode',
+      'dob',
+      'workingDays',
+      'startTime',
+      'endTime',
+    ];
+
+    for (const field of requiredFields) {
+      if (!practitionerData[field]) {
+        toast.error('Please fill in all required fields.');
+        return false;
+      }
+    }
+
+    return true;
   };
 
   return (
