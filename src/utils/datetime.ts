@@ -8,9 +8,9 @@ import dayjs from 'dayjs';
  * @returns {string}
  */
 export const formatDate = (date: Date | string | undefined, formatting: string): string => {
-  if(!date) {
-    return "";
+  if (date) {
+    return dayjs(date).format(formatting);
   }
-  
-  return dayjs(date).format(formatting);
+
+  return '';
 };
