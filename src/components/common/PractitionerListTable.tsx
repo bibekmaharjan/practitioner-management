@@ -2,6 +2,7 @@ import * as React from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 
 import Loading from './Loading';
+import NotFound from './NotFound';
 import PractitionerListItem from './PractitionerListItem';
 import { fetchPractitioners } from '../../services/practitioner';
 import PractitionerPayload from '../../domain/requests/PractitionerPayload';
@@ -16,6 +17,7 @@ interface PractitionerListTableProps {
 
 const PractitionerListTable = (props: PractitionerListTableProps) => {
   const [isFetching, setIsFetching] = React.useState<boolean>(false);
+  const [hasError, setHasError] = React.useState<boolean>(false);
 
   const fetchUserData = () => {
     setIsFetching(true);
@@ -23,9 +25,12 @@ const PractitionerListTable = (props: PractitionerListTableProps) => {
       (d: PractitionerResponse) => {
         props.setUserData(d.data);
         setIsFetching(false);
+        setHasError(false);
       },
       (e) => {
         toast.error(e);
+        setHasError(true);
+        setIsFetching(false);
       }
     );
   };
@@ -50,25 +55,25 @@ const PractitionerListTable = (props: PractitionerListTableProps) => {
 
   return (
     <>
-      {isFetching ? (
-        <Loading />
-      ) : (
-        <div className="practitionerListTable__wrapper">
-          <table className="practitionerListTable" cellSpacing="0">
-            <tr className="practitionerListTable__header">
-              <th className="text__label-muted">Basic Info</th>
-              <th className="text__label-muted">Phone Number</th>
-              <th className="text__label-muted">DOB</th>
-              <th className="text__label-muted">Start time</th>
-              <th className="text__label-muted">End time</th>
-              <th className="text__label-muted">ICU Specialist</th>
-            </tr>
-            {sortedData.map((data: PractitionerPayload) => (
-              <PractitionerListItem data={data} key={data.id} handleActionMenuClick={handleActionMenuClick} />
-            ))}
-          </table>
-        </div>
-      )}
+     {isFetching && <Loading />}
+      {hasError && <NotFound />}
+      {!isFetching && !hasError && (
+          <div className="practitionerListTable__wrapper">
+            <table className="practitionerListTable" cellSpacing="0">
+              <tr className="practitionerListTable__header">
+                <th className="text__label-muted">Basic Info</th>
+                <th className="text__label-muted">Phone Number</th>
+                <th className="text__label-muted">DOB</th>
+                <th className="text__label-muted">Start time</th>
+                <th className="text__label-muted">End time</th>
+                <th className="text__label-muted">ICU Specialist</th>
+              </tr>
+              {sortedData.map((data: PractitionerPayload) => (
+                <PractitionerListItem data={data} key={data.id} handleActionMenuClick={handleActionMenuClick} />
+              ))}
+            </table>
+          </div>
+        )}
       <ToastContainer />
     </>
   );
