@@ -95,7 +95,7 @@ const PractitionerActionForm = (props: PractitionerActionFormProps) => {
   };
 
   return (
-    <div className="practitionerActionForm__container">
+    <div className="modal__container">
       <div className="practitionerActionForm__modal modal">
         <div className="practitionerActionForm__header mb-md">
           <span className="text__title-med">{editedData ? 'Edit Practitioner' : 'Add Practitioner'}</span>
