@@ -36,8 +36,6 @@ const PractitionerListItem = ({ data, handleActionMenuClick } : PractitionerList
   const handleDelete = (e: React.MouseEvent<HTMLSpanElement>) => {
     e.stopPropagation();
     e.preventDefault();
-
-   
   };
 
   return (
