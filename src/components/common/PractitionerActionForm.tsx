@@ -14,6 +14,11 @@ interface PractitionerActionFormProps {
 }
 
 const PractitionerActionForm = (props: PractitionerActionFormProps) => {
+  const [isDisabled, setIsDisabled] = React.useState(false);
+  const [isSubmitting, setIsSubmitting] = React.useState(false);
+
+  const editedData: PractitionerPayload | undefined = props.editData;
+
   const handleMenuClose = (e: any) => {
     e.stopPropagation();
     e.preventDefault();
@@ -22,12 +27,9 @@ const PractitionerActionForm = (props: PractitionerActionFormProps) => {
     props.setEditData(undefined);
   };
 
-  const [isDisabled, setIsDisabled] = React.useState(false);
-  const [isSubmitting, setIsSubmitting] = React.useState(false);
-
   const initialData: PractitionerPayload = React.useMemo(() => {
-    return props.editData
-      ? props.editData
+    return editedData
+      ? editedData
       : {
           dob: '',
           city: '',
@@ -45,7 +47,7 @@ const PractitionerActionForm = (props: PractitionerActionFormProps) => {
           workingDays: [],
           isICUSpecialist: false,
         };
-  }, [props.editData]);
+  }, [editedData]);
 
   const [practitionerData, setPractitionerData] = React.useState(initialData);
   const [selectedAllergies, setSelectedAllergies] = React.useState<string[]>([]);
@@ -94,7 +96,7 @@ const PractitionerActionForm = (props: PractitionerActionFormProps) => {
       return;
     }
 
-    if (props.editData === practitionerData) {
+    if (editedData === practitionerData) {
       handleMenuClose(e);
       props.setEditData(undefined);
 
@@ -103,7 +105,7 @@ const PractitionerActionForm = (props: PractitionerActionFormProps) => {
 
     setIsSubmitting(true);
 
-    props.editData ? props.handleUserEdit(practitionerData, props.editData.id) : props.addUserData(practitionerData);
+    editedData ? props.handleUserEdit(practitionerData, editedData.id) : props.addUserData(practitionerData);
     setIsSubmitting(false);
     props.setEditData(undefined);
     handleMenuClose(e);
@@ -134,10 +136,10 @@ const PractitionerActionForm = (props: PractitionerActionFormProps) => {
   };
 
   return (
-    <div className="practitionerActionForm__container">
+    <div className="modal__container">
       <div className="practitionerActionForm__modal modal">
         <div className="practitionerActionForm__header mb-md">
-          <span className="text__title-med">{props.editData ? 'Edit Practitioner' : 'Add Practitioner'}</span>
+          <span className="text__title-med">{editedData ? 'Edit Practitioner' : 'Add Practitioner'}</span>
           <img src={closeIcon} alt="" onClick={handleMenuClose} />
         </div>
         <div className="practitionerActionForm__content">
@@ -425,7 +427,7 @@ const PractitionerActionForm = (props: PractitionerActionFormProps) => {
         </div>
         <div className="disp-flex flex-justify-end ">
           <button className="btn btn__primary" disabled={isSubmitting || isDisabled} onClick={handleSubmit}>
-            {props.editData ? ' Edit Practitioner' : 'Add practitioner'}
+            {editedData ? 'Edit Practitioner' : 'Add practitioner'}
           </button>
         </div>
       </div>
