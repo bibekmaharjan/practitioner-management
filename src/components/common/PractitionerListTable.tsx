@@ -2,11 +2,12 @@ import React, { useEffect } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 
 import Loading from './Loading';
+import NotFound from './NotFound';
 import PractitionerListItem from './PractitionerListItem';
 import PractitionerActionForm from './PractitionerActionForm';
 import PractitionerPayload from '../../domain/requests/PractitionerPayload';
 import PractitionerResponse from '../../domain/responses/PractitionerResponse';
-import { addPractitioner, deletePractitioner, editPractitioner, fetchPractitioners } from '../../services/practitioner';
+import { addPractitioner, editPractitioner, fetchPractitioners } from '../../services/practitioner';
 
 interface PractitionerListTableProps {
   isActionMenu: boolean;
@@ -16,6 +17,7 @@ interface PractitionerListTableProps {
 }
 
 const PractitionerListTable = (props: PractitionerListTableProps) => {
+  const [hasError, setHasError] = React.useState<boolean>(false);
   const [isFetching, setIsFetching] = React.useState<boolean>(false);
   const [editData, setEditData] = React.useState<PractitionerPayload | undefined>(undefined);
 
@@ -25,9 +27,12 @@ const PractitionerListTable = (props: PractitionerListTableProps) => {
       (d: PractitionerResponse) => {
         props.setUserData(d.data);
         setIsFetching(false);
+        setHasError(false);
       },
       (e) => {
         toast.error(e);
+        setHasError(true);
+        setIsFetching(false);
       }
     );
   };
@@ -40,7 +45,7 @@ const PractitionerListTable = (props: PractitionerListTableProps) => {
       },
       (e) => {
         console.log(e);
-        toast.error('Practitioner couldnot be added');
+        toast.error('Practitioner could not be added');
       }
     );
   };
@@ -52,19 +57,6 @@ const PractitionerListTable = (props: PractitionerListTableProps) => {
       );
       setEditData(selectedEdit);
     }
-  };
-
-  const deleteUserData = (id: number) => {
-    deletePractitioner(id).then(
-      () => {
-        fetchUserData();
-        toast.success('Practitioner deleted successfully');
-      },
-      (e) => {
-        console.log(e);
-        toast.error('Sorry action cannot be completed');
-      }
-    );
   };
 
   const handleUserEdit = (userData: PractitionerPayload, id: number | undefined) => {
@@ -102,9 +94,9 @@ const PractitionerListTable = (props: PractitionerListTableProps) => {
 
   return (
     <>
-      {isFetching ? (
-        <Loading />
-      ) : (
+      {isFetching && <Loading />}
+      {hasError && <NotFound />}
+      {!isFetching && !hasError && (
         <div className="practitionerListTable__wrapper">
           <table className="practitionerListTable" cellSpacing="0">
             <tr className="practitionerListTable__header">
@@ -120,7 +112,7 @@ const PractitionerListTable = (props: PractitionerListTableProps) => {
                 data={data}
                 key={data.id}
                 editUserData={editUserData}
-                deleteUserData={deleteUserData}
+                fetchUserData={fetchUserData}
                 handleActionMenuClick={handleActionMenuClick}
               />
             ))}
