@@ -1,4 +1,6 @@
 .notFound {
+  grid-column: leftgutter-start / rightgutter-end;
+
   display: flex;
   flex-direction: column;
   align-items: center;
