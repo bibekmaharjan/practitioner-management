@@ -6,6 +6,7 @@ import { formatDate } from '../utils/datetime';
 import { DATE_FORMAT } from '../constants/date';
 import Header from '../components/layout/Header';
 import Loading from '../components/common/Loading';
+import NotFound from '../components/common/NotFound';
 import UserDetail from '../domain/responses/UserDetail';
 import Breadcrumb from '../components/common/Breadcrumb';
 import { fetchPractitionerDetails } from '../services/practitioner';
@@ -13,6 +14,7 @@ import { fetchPractitionerDetails } from '../services/practitioner';
 const PractitionerProfile = () => {
   const { id } = useParams();
   const [userData, setUserData] = React.useState<UserDetail>();
+  const [hasError, setHasError] = React.useState<boolean>(false);
   const [isFetching, setIsFetching] = React.useState<boolean>(false);
 
   React.useEffect(() => {
@@ -21,10 +23,13 @@ const PractitionerProfile = () => {
     fetchPractitionerDetails(id).then(
       (d) => {
         setUserData(d.data);
+        setHasError(false);
         setIsFetching(false);
       },
       (e) => {
         toast.error(e);
+        setHasError(true);
+        setIsFetching(false);
       }
     );
   }, []);
@@ -32,9 +37,9 @@ const PractitionerProfile = () => {
   return (
     <React.Fragment>
       <Header />
-      {isFetching ? (
-        <Loading />
-      ) : (
+      {isFetching && <Loading />}
+      {hasError && <NotFound />}
+      {!isFetching && !hasError && (
         <section className="practitionerProfile">
           <Breadcrumb name={userData?.fullName} />
           <div className="practitionerProfile__wrapper">

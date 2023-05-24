@@ -1,4 +1,5 @@
-import React, { useEffect } from 'react';
+import { toast } from 'react-toastify';
+import React, { SetStateAction, useEffect } from 'react';
 
 import FileUpload from './FileUpload';
 import closeIcon from '../../assets/images/close-icon.png';
@@ -13,6 +14,11 @@ interface PractitionerActionFormProps {
 }
 
 const PractitionerActionForm = (props: PractitionerActionFormProps) => {
+  const [isDisabled, setIsDisabled] = React.useState(false);
+  const [isSubmitting, setIsSubmitting] = React.useState(false);
+
+  const editedData: PractitionerPayload | undefined = props.editData;
+
   const handleMenuClose = (e: any) => {
     e.stopPropagation();
     e.preventDefault();
@@ -21,12 +27,9 @@ const PractitionerActionForm = (props: PractitionerActionFormProps) => {
     props.setEditData(undefined);
   };
 
-  const [isDisabled, setIsDisabled] = React.useState(false);
-  const [isSubmitting, setIsSubmitting] = React.useState(false);
-
   const initialData: PractitionerPayload = React.useMemo(() => {
-    return props.editData
-      ? props.editData
+    return editedData
+      ? editedData
       : {
           dob: '',
           city: '',
@@ -41,21 +44,29 @@ const PractitionerActionForm = (props: PractitionerActionFormProps) => {
           userImg: null,
           startTime: '',
           allergies: [],
-          workingDays: 0,
+          workingDays: [],
           isICUSpecialist: false,
         };
-  }, [props.editData]);
+  }, [editedData]);
 
   const [practitionerData, setPractitionerData] = React.useState(initialData);
   const [selectedAllergies, setSelectedAllergies] = React.useState<string[]>([]);
+  const [selectedWorkingDays, setSelectedWorkingDays] = React.useState<string[]>([]);
 
   useEffect(() => {
     setPractitionerData({ ...practitionerData, allergies: selectedAllergies });
   }, [selectedAllergies]);
 
-  const handleAllergiesChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  useEffect(() => {
+    setPractitionerData({ ...practitionerData, workingDays: selectedWorkingDays });
+  }, [selectedWorkingDays]);
+
+  const handleCheckBoxChange = (
+    event: React.ChangeEvent<HTMLInputElement>,
+    setState: React.Dispatch<SetStateAction<string[]>>
+  ) => {
     const itemName = event.target.name;
-    setSelectedAllergies((prevCheckedItems: string[]) =>
+    setState((prevCheckedItems: string[]) =>
       prevCheckedItems.includes(itemName)
         ? prevCheckedItems.filter((itemtype: string) => itemtype !== itemName)
         : [...prevCheckedItems, itemName]
@@ -77,7 +88,15 @@ const PractitionerActionForm = (props: PractitionerActionFormProps) => {
   };
 
   const handleSubmit = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-    if (props.editData === practitionerData) {
+    console.log(practitionerData);
+    console.log(selectedWorkingDays);
+
+    // Validate inputs before submitting
+    if (!validateInputs()) {
+      return;
+    }
+
+    if (editedData === practitionerData) {
       handleMenuClose(e);
       props.setEditData(undefined);
 
@@ -86,22 +105,47 @@ const PractitionerActionForm = (props: PractitionerActionFormProps) => {
 
     setIsSubmitting(true);
 
-    props.editData ? props.handleUserEdit(practitionerData, props.editData.id) : props.addUserData(practitionerData);
+    editedData ? props.handleUserEdit(practitionerData, editedData.id) : props.addUserData(practitionerData);
     setIsSubmitting(false);
     props.setEditData(undefined);
     handleMenuClose(e);
   };
 
+  const validateInputs = (): boolean => {
+    const requiredFields: Array<keyof PractitionerPayload> = [
+      'fullName',
+      'email',
+      'contact',
+      'city',
+      'gender',
+      'zipcode',
+      'dob',
+      'workingDays',
+      'startTime',
+      'endTime',
+    ];
+
+    for (const field of requiredFields) {
+      if (!practitionerData[field]) {
+        toast.error('Please fill in all required fields.');
+        return false;
+      }
+    }
+
+    return true;
+  };
+
   return (
-    <div className="practitionerActionForm__container">
+    <div className="modal__container">
       <div className="practitionerActionForm__modal modal">
         <div className="practitionerActionForm__header mb-md">
-          <span className="text__title-med">{props.editData ? 'Edit Practitioner' : 'Add Practitioner'}</span>
+          <span className="text__title-med">{editedData ? 'Edit Practitioner' : 'Add Practitioner'}</span>
           <img src={closeIcon} alt="" onClick={handleMenuClose} />
         </div>
         <div className="practitionerActionForm__content">
           <FileUpload setPractitionerData={setPractitionerData} practitionerData={practitionerData} />
           <div className="disp-flex flex-col flex-space-between">
+            {/* need to refactor and create enums for non repeative code */}
             <input
               required
               type="text"
@@ -146,15 +190,45 @@ const PractitionerActionForm = (props: PractitionerActionFormProps) => {
               className="input__text mb-tn"
             />
           </div>
-
-          <input
-            type="text"
-            name="gender"
-            onChange={handleOnChange}
-            placeholder="YOUR GENDER"
-            className="input__text mb-tn"
-            value={practitionerData.gender}
-          />
+          <div className="practitionerActionForm__gender-wrapper">
+            <span className="text__label mr-sm">Gender: </span>
+            <input
+              type="radio"
+              name="gender"
+              onChange={handleOnChange}
+              placeholder="YOUR GENDER"
+              className="mr-tn"
+              value="Male"
+              id="Male"
+            />
+            <label className="mr-tn" htmlFor="Male">
+              Male
+            </label>
+            <input
+              type="radio"
+              name="gender"
+              onChange={handleOnChange}
+              placeholder="YOUR GENDER"
+              className="mr-tn"
+              value="Female"
+              id="Female"
+            />
+            <label className="mr-tn" htmlFor="Female">
+              Female
+            </label>
+            <input
+              type="radio"
+              name="gender"
+              onChange={handleOnChange}
+              placeholder="YOUR GENDER"
+              className="mr-tn"
+              value="Others"
+              id="Others"
+            />
+            <label className="mr-tn" htmlFor="Others">
+              Others
+            </label>
+          </div>
           <input
             type="number"
             name="zipcode"
@@ -172,15 +246,81 @@ const PractitionerActionForm = (props: PractitionerActionFormProps) => {
             className="input__text mb-tn"
             placeholder="YOUR DATE OF BIRTH"
           />
-          <input
-            required
-            type="number"
-            name="workingDays"
-            onChange={handleOnChange}
-            className="input__text mb-tn"
-            placeholder="YOUR WORKING DAYS"
-            value={practitionerData.workingDays}
-          />
+          <div className="practitionerActionForm__allergies-wrapper">
+            <span className="text__label">Working Days: </span>
+            <div className="practitionerActionForm__allergies">
+              <label>
+                <input
+                  type="checkbox"
+                  name="Sunday"
+                  className="mr-sm"
+                  onChange={(event) => handleCheckBoxChange(event, setSelectedWorkingDays)}
+                  checked={selectedWorkingDays.includes('Sunday')}
+                />
+                Sunday
+              </label>
+              <label>
+                <input
+                  type="checkbox"
+                  name="Monday"
+                  className="mr-sm"
+                  onChange={(event) => handleCheckBoxChange(event, setSelectedWorkingDays)}
+                  checked={selectedWorkingDays.includes('Monday')}
+                />
+                Monday
+              </label>
+              <label>
+                <input
+                  type="checkbox"
+                  name="Tuesday"
+                  className="mr-sm"
+                  onChange={(event) => handleCheckBoxChange(event, setSelectedWorkingDays)}
+                  checked={selectedWorkingDays.includes('Tuesday')}
+                />
+                Tuesday
+              </label>
+              <label>
+                <input
+                  type="checkbox"
+                  name="Wednesday"
+                  className="mr-sm"
+                  onChange={(event) => handleCheckBoxChange(event, setSelectedWorkingDays)}
+                  checked={selectedWorkingDays.includes('Wednesday')}
+                />
+                Wednesday
+              </label>
+              <label>
+                <input
+                  type="checkbox"
+                  name="Thursday"
+                  className="mr-sm"
+                  onChange={(event) => handleCheckBoxChange(event, setSelectedWorkingDays)}
+                  checked={selectedWorkingDays.includes('Thursday')}
+                />
+                Thursday
+              </label>
+              <label>
+                <input
+                  type="checkbox"
+                  name="Friday"
+                  className="mr-sm"
+                  onChange={(event) => handleCheckBoxChange(event, setSelectedWorkingDays)}
+                  checked={selectedWorkingDays.includes('Friday')}
+                />
+                Friday
+              </label>
+              <label>
+                <input
+                  type="checkbox"
+                  name="Saturday"
+                  className="mr-sm"
+                  onChange={(event) => handleCheckBoxChange(event, setSelectedWorkingDays)}
+                  checked={selectedWorkingDays.includes('Saturday')}
+                />
+                Saturday
+              </label>
+            </div>
+          </div>
           <input
             required
             type="date"
@@ -227,7 +367,7 @@ const PractitionerActionForm = (props: PractitionerActionFormProps) => {
                   type="checkbox"
                   name="pollen"
                   className="mr-sm"
-                  onChange={handleAllergiesChange}
+                  onChange={(event) => handleCheckBoxChange(event, setSelectedAllergies)}
                   checked={selectedAllergies.includes('pollen')}
                 />
                 Pollen
@@ -237,7 +377,7 @@ const PractitionerActionForm = (props: PractitionerActionFormProps) => {
                   type="checkbox"
                   name="Mould"
                   className="mr-sm"
-                  onChange={handleAllergiesChange}
+                  onChange={(event) => handleCheckBoxChange(event, setSelectedAllergies)}
                   checked={selectedAllergies.includes('Mould')}
                 />
                 Mould
@@ -247,7 +387,7 @@ const PractitionerActionForm = (props: PractitionerActionFormProps) => {
                   type="checkbox"
                   name="Food Allergies"
                   className="mr-sm"
-                  onChange={handleAllergiesChange}
+                  onChange={(event) => handleCheckBoxChange(event, setSelectedAllergies)}
                   checked={selectedAllergies.includes('Food Allergies')}
                 />
                 Food Allergies
@@ -257,7 +397,7 @@ const PractitionerActionForm = (props: PractitionerActionFormProps) => {
                   type="checkbox"
                   name="Cockroaches"
                   className="mr-sm"
-                  onChange={handleAllergiesChange}
+                  onChange={(event) => handleCheckBoxChange(event, setSelectedAllergies)}
                   checked={selectedAllergies.includes('Cockroaches')}
                 />
                 Cockroaches
@@ -267,7 +407,7 @@ const PractitionerActionForm = (props: PractitionerActionFormProps) => {
                   type="checkbox"
                   name="Insect stings"
                   className="mr-sm"
-                  onChange={handleAllergiesChange}
+                  onChange={(event) => handleCheckBoxChange(event, setSelectedAllergies)}
                   checked={selectedAllergies.includes('Insect stings')}
                 />
                 Insect stings
@@ -277,7 +417,7 @@ const PractitionerActionForm = (props: PractitionerActionFormProps) => {
                   type="checkbox"
                   name="Dust mites"
                   className="mr-sm"
-                  onChange={handleAllergiesChange}
+                  onChange={(event) => handleCheckBoxChange(event, setSelectedAllergies)}
                   checked={selectedAllergies.includes('Dust mites')}
                 />
                 Dust mites
@@ -287,7 +427,7 @@ const PractitionerActionForm = (props: PractitionerActionFormProps) => {
         </div>
         <div className="disp-flex flex-justify-end ">
           <button className="btn btn__primary" disabled={isSubmitting || isDisabled} onClick={handleSubmit}>
-            {props.editData ? ' Edit Practitioner' : 'Add practitioner'}
+            {editedData ? 'Edit Practitioner' : 'Add practitioner'}
           </button>
         </div>
       </div>
