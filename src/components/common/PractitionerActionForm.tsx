@@ -15,6 +15,7 @@ interface PractitionerActionFormProps {
 const PractitionerActionForm = (props: PractitionerActionFormProps) => {
   const [isDisabled, setIsDisabled] = React.useState(false);
   const [isSubmitting, setIsSubmitting] = React.useState(false);
+  const [isFormEdited, setIsFormEdited] = React.useState(false);
 
   const editedData: PractitionerPayload | undefined = props.editData;
 
@@ -76,10 +77,11 @@ const PractitionerActionForm = (props: PractitionerActionFormProps) => {
       value = e.target.checked;
     }
     setPractitionerData({ ...practitionerData, [name]: value });
+    setIsFormEdited(true);
   };
 
   const handleSubmit = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-    if (editedData === practitionerData) {
+    if (!isFormEdited) {
       handleMenuClose(e);
       props.setEditData(undefined);
 
@@ -91,6 +93,7 @@ const PractitionerActionForm = (props: PractitionerActionFormProps) => {
     editedData ? props.handleUserEdit(practitionerData, editedData.id) : props.addUserData(practitionerData);
     setIsSubmitting(false);
     props.setEditData(undefined);
+    setIsFormEdited(false);
     handleMenuClose(e);
   };
 
