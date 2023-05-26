@@ -11,8 +11,7 @@ interface PractitionerListItemProps {
   handleActionMenuClick: (e: React.MouseEvent<HTMLSpanElement>) => void;
 }
 
-const PractitionerListItem = ({ data, handleActionMenuClick } : PractitionerListItemProps) => {
-
+const PractitionerListItem = ({ data, handleActionMenuClick }: PractitionerListItemProps) => {
   const [isMenu, setIsMenu] = React.useState(false);
 
   const navigate = useNavigate();
@@ -29,7 +28,7 @@ const PractitionerListItem = ({ data, handleActionMenuClick } : PractitionerList
 
   const handleEditClick = (e: React.MouseEvent<HTMLSpanElement>) => {
     setIsMenu(!isMenu);
-   
+
     handleActionMenuClick(e);
   };
 
@@ -70,7 +69,12 @@ const PractitionerListItem = ({ data, handleActionMenuClick } : PractitionerList
           </span>
         </td>
         <td className="practitionerListTable__userInfo-dotsMenu--container">
-          <img src={dotsIcon} onClick={handleMenuClick} className="practitionerListTable__userInfo-dotsIcon" alt="menu-icon" />
+          <img
+            src={dotsIcon}
+            onClick={handleMenuClick}
+            className="practitionerListTable__userInfo-dotsIcon"
+            alt="menu-icon"
+          />
           {isMenu && (
             <div className="practitionerListTable__userInfo-dotsMenu">
               <span className="text__label-muted" onClick={(e) => handleEditClick(e)}>
