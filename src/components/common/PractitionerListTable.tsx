@@ -112,6 +112,7 @@ const PractitionerListTable = (props: PractitionerListTableProps) => {
                 data={data}
                 key={data.id}
                 editUserData={editUserData}
+                fetchUserData={fetchUserData}
                 handleActionMenuClick={handleActionMenuClick}
               />
             ))}

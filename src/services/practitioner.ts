@@ -36,3 +36,13 @@ export async function editPractitioner(practitionerData: PractitionerPayload, id
 
   return await http.put(url, formDataToSubmit);
 }
+
+/**
+ * Delete practitioner list.
+ *
+ */
+export async function deletePractitioner(id: number) {
+  const url = interpolate(config.endpoints.deletePractitioners, { id });
+
+  return await http.delete(url);
+}
