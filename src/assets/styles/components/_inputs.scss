@@ -1,0 +1,10 @@
+.input {
+  &__text {
+    border: none;
+    outline: none;
+    font-size: 1.6rem;
+    background-color: $color-gray-lightest;
+    padding: 0.5rem 1rem;
+    border-radius: 1rem;
+  }
+}

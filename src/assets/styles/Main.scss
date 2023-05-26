@@ -9,8 +9,8 @@
 
 // Import component styles
 // @import './components/modal';
-// @import './components/button';
-// @import './components/inputs';
+@import './components/button';
+@import './components/inputs';
 // @import './components/loading';
 // @import './components/breadcrumb';
 // @import './components/imageUpload';
@@ -21,6 +21,6 @@
 @import './layout/header';
 
 // Import page styles
-// @import './pages/signin';
+@import './pages/signin';
 // @import './pages/practitionerList';
 // @import './pages/practitionerProfile';
