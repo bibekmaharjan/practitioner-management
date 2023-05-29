@@ -22,7 +22,7 @@ const PractitionerListTable = (props: PractitionerListTableProps) => {
   const fetchUserData = async () => {
     try {
       setIsFetching(true);
-      const response = await fetchPractitioners();
+      const response: PractitionerResponse = await fetchPractitioners();
       props.setUserData(response.data);
       setIsFetching(false);
       setHasError(false);
