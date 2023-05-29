@@ -11,7 +11,7 @@ interface PractitionerPayload {
   endTime: string;
   fullName: string;
   startTime: string;
-  workingDays: number;
+  workingDays: string[];
   allergies: string[];
   isICUSpecialist: boolean;
   userImg: string | File | null;

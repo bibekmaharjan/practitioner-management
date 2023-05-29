@@ -1,0 +1,41 @@
+.practitionerProfile {
+  grid-column: leftgutter-start / rightgutter-end;
+
+  &__wrapper {
+    display: flex;
+    padding: 1.5rem;
+  }
+
+  &__userInfo {
+    background-color: $color-white;
+    width: 30%;
+    border-radius: 1.5rem;
+    margin-right: 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 1.5rem;
+
+    &-img {
+      height: 20rem;
+      width: 20rem;
+      object-fit: cover;
+      border-radius: 50%;
+      margin-bottom: 2rem;
+    }
+
+    &-details {
+      background-color: $color-white;
+      width: 70%;
+      border-radius: 1.5rem;
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      padding: 3.5rem;
+
+      &--info {
+        display: flex;
+        flex-direction: column;
+      }
+    }
+  }
+}

@@ -1,6 +1,7 @@
 import config from '../config';
 import http from '../utils/http';
 import { interpolate } from '../utils/interpolate';
+import UserDetailResponse from '../domain/responses/UserDetailResponse';
 import PractitionerPayload from '../domain/requests/PractitionerPayload';
 import PractitionerResponse from '../domain/responses/PractitionerResponse';
 
@@ -45,4 +46,15 @@ export async function deletePractitioner(id: number) {
   const url = interpolate(config.endpoints.deletePractitioners, { id });
 
   return await http.delete(url);
+}
+
+/**
+ * Fetch details for practitioner.
+ *
+ * @returns {Promise<UserDetailResponse>}
+ */
+export async function fetchPractitionerDetails(id: string | undefined): Promise<UserDetailResponse> {
+  const url = interpolate(config.endpoints.practitionerDetails, { id });
+
+  return await http.get(url);
 }
