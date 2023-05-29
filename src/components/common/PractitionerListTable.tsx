@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { ToastContainer, toast } from 'react-toastify';
+import { ToastContainer, ToastContent, toast } from 'react-toastify';
 
 import Loading from './Loading';
 import NotFound from './NotFound';
@@ -19,20 +19,21 @@ const PractitionerListTable = (props: PractitionerListTableProps) => {
   const [isFetching, setIsFetching] = React.useState<boolean>(false);
   const [hasError, setHasError] = React.useState<boolean>(false);
 
-  const fetchUserData = () => {
-    setIsFetching(true);
-    fetchPractitioners().then(
-      (d: PractitionerResponse) => {
-        props.setUserData(d.data);
-        setIsFetching(false);
-        setHasError(false);
-      },
-      (e) => {
-        toast.error(e);
-        setHasError(true);
-        setIsFetching(false);
-      }
-    );
+  const fetchUserData = async () => {
+    try {
+      setIsFetching(true);
+      const response = await fetchPractitioners();
+      props.setUserData(response.data);
+      setIsFetching(false);
+      setHasError(false);
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : String(error);
+      toast.error(errorMessage as ToastContent<unknown>);
+      setHasError(true);
+      setIsFetching(false);
+    }
+
+
   };
 
   const handleActionMenuClick = (e: React.MouseEvent<HTMLSpanElement>) => {
