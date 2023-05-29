@@ -7,6 +7,6 @@ import dayjs from 'dayjs';
  * @param {string} formatting
  * @returns {string}
  */
-export const formatDate = (date: Date | string | undefined, formatting: string): string => {
+export const formatDate = (date: Date | string, formatting: string): string => {
   return dayjs(date).format(formatting);
 };
