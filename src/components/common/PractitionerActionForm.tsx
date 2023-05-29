@@ -6,38 +6,48 @@ import PractitionerPayload from '../../domain/requests/PractitionerPayload';
 
 interface PractitionerActionFormProps {
   setIsVisible: (value: boolean) => void;
+  editData: PractitionerPayload | undefined;
   addUserData: (data: PractitionerPayload) => void;
+  setEditData: (data: PractitionerPayload | undefined) => void;
+  handleUserEdit: (practitionerData: PractitionerPayload, id: number | undefined) => void;
 }
 
 const PractitionerActionForm = (props: PractitionerActionFormProps) => {
+  const [isDisabled, setIsDisabled] = React.useState(false);
+  const [isSubmitting, setIsSubmitting] = React.useState(false);
+  const [isFormEdited, setIsFormEdited] = React.useState(false);
+
+  const editedData: PractitionerPayload | undefined = props.editData;
+
   const handleMenuClose = (e: any) => {
     e.stopPropagation();
     e.preventDefault();
+
     props.setIsVisible(false);
+    props.setEditData(undefined);
   };
 
-  const [isSubmitting, setIsSubmitting] = React.useState(false);
-  const [isDisabled, setIsDisabled] = React.useState(false);
-
   const initialData: PractitionerPayload = React.useMemo(() => {
-    return {
-      dob: '',
-      city: '',
-      email: '',
-      gender: '',
-      status: '',
-      address: '',
-      contact: '',
-      zipcode: '',
-      endTime: '',
-      fullName: '',
-      userImg: null,
-      startTime: '',
-      allergies: [],
-      workingDays: 0,
-      isICUSpecialist: false,
-    };
-  }, []);
+    return editedData
+      ? editedData
+      : {
+          dob: '',
+          city: '',
+          email: '',
+          gender: '',
+          status: '',
+          address: '',
+          contact: '',
+          zipcode: '',
+          endTime: '',
+          fullName: '',
+          userImg: null,
+          startTime: '',
+          allergies: [],
+          workingDays: 0,
+          isICUSpecialist: false,
+        };
+  }, [editedData]);
 
   const [practitionerData, setPractitionerData] = React.useState(initialData);
   const [selectedAllergies, setSelectedAllergies] = React.useState<string[]>([]);
@@ -67,21 +77,31 @@ const PractitionerActionForm = (props: PractitionerActionFormProps) => {
       value = e.target.checked;
     }
     setPractitionerData({ ...practitionerData, [name]: value });
+    setIsFormEdited(true);
   };
 
   const handleSubmit = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    if (!isFormEdited) {
+      handleMenuClose(e);
+      props.setEditData(undefined);
+
+      return;
+    }
+
     setIsSubmitting(true);
 
-    props.addUserData(practitionerData);
+    editedData ? props.handleUserEdit(practitionerData, editedData.id) : props.addUserData(practitionerData);
     setIsSubmitting(false);
+    props.setEditData(undefined);
+    setIsFormEdited(false);
     handleMenuClose(e);
   };
 
   return (
-    <div className="practitionerActionForm__container">
+    <div className="modal__container">
       <div className="practitionerActionForm__modal modal">
         <div className="practitionerActionForm__header mb-md">
-          <span className="text__title-med">Add Practitioner</span>
+          <span className="text__title-med">{editedData ? 'Edit Practitioner' : 'Add Practitioner'}</span>
           <img src={closeIcon} alt="" onClick={handleMenuClose} />
         </div>
         <div className="practitionerActionForm__content">
@@ -272,7 +292,7 @@ const PractitionerActionForm = (props: PractitionerActionFormProps) => {
         </div>
         <div className="disp-flex flex-justify-end ">
           <button className="btn btn__primary" disabled={isSubmitting || isDisabled} onClick={handleSubmit}>
-            Add practitioner
+            {editedData ? 'Edit Practitioner' : 'Add practitioner'}
           </button>
         </div>
       </div>
