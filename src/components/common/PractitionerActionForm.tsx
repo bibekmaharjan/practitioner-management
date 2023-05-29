@@ -88,9 +88,6 @@ const PractitionerActionForm = (props: PractitionerActionFormProps) => {
   };
 
   const handleSubmit = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-    console.log(practitionerData);
-    console.log(selectedWorkingDays);
-
     // Validate inputs before submitting
     if (!validateInputs()) {
       return;
