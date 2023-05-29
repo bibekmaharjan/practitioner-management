@@ -11,10 +11,11 @@
 // @import './components/modal';
 @import './components/button';
 @import './components/inputs';
-// @import './components/loading';
+@import './components/loading';
+@import './components/notFound';
 // @import './components/breadcrumb';
 // @import './components/imageUpload';
-// @import './components/practitionerListTable';
+@import './components/practitionerListTable';
 // @import './components/practitionerActionForm';
 
 // Import layout styles
@@ -22,5 +23,5 @@
 
 // Import page styles
 @import './pages/signin';
-// @import './pages/practitionerList';
+@import './pages/practitionerList';
 // @import './pages/practitionerProfile';
