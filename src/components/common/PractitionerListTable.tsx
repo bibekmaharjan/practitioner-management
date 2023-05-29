@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useEffect }  from 'react';
 import { ToastContainer, ToastContent, toast } from 'react-toastify';
 
 import Loading from './Loading';
@@ -42,7 +42,7 @@ const PractitionerListTable = (props: PractitionerListTableProps) => {
     props.setIsActionMenu(true);
   };
 
-  React.useEffect(() => {
+  useEffect(() => {
     fetchUserData();
   }, []);
 
