@@ -48,23 +48,19 @@ const PractitionerListItem: React.FC<PractitionerListItemProps> = ({
     handleActionMenuClick(e);
   };
 
-  const deleteUserData = (id: number | undefined) => {
+  const deleteUserData = async (id: number | undefined) => {
     if (id) {
-      setIsDeleting(true);
-
-      deletePractitioner(id).then(
-        () => {
-          fetchUserData();
-          toast.success('Practitioner deleted successfully');
-          setIsDeleting(false);
-          setIsModalVisible(false);
-        },
-        (e) => {
-          toast.error('Sorry action cannot be completed');
-          setIsDeleting(false);
-          setIsModalVisible(false);
-        }
-      );
+      try {
+        setIsDeleting(true);
+        await deletePractitioner(id);
+        await fetchUserData();
+        toast.success('Practitioner deleted successfully');
+      } catch (error) {
+        toast.error('Sorry, the action cannot be completed');
+      } finally {
+        setIsDeleting(false);
+        setIsModalVisible(false);
+      }
     } else {
       toast.error('Practitioner id not found.');
       setIsDeleting(false);

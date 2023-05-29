@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { ToastContainer, toast } from 'react-toastify';
+import { ToastContainer, ToastContent, toast } from 'react-toastify';
 
 import Loading from './Loading';
 import NotFound from './NotFound';
@@ -21,33 +21,29 @@ const PractitionerListTable = (props: PractitionerListTableProps) => {
   const [isFetching, setIsFetching] = React.useState<boolean>(false);
   const [editData, setEditData] = React.useState<PractitionerPayload | undefined>(undefined);
 
-  const fetchUserData = () => {
-    setIsFetching(true);
-    fetchPractitioners().then(
-      (d: PractitionerResponse) => {
-        props.setUserData(d.data);
-        setIsFetching(false);
-        setHasError(false);
-      },
-      (e) => {
-        toast.error(e);
-        setHasError(true);
-        setIsFetching(false);
-      }
-    );
+  const fetchUserData = async () => {
+    try {
+      setIsFetching(true);
+      const response: PractitionerResponse = await fetchPractitioners();
+      props.setUserData(response.data);
+      setIsFetching(false);
+      setHasError(false);
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : String(error);
+      toast.error(errorMessage as ToastContent<unknown>);
+      setHasError(true);
+      setIsFetching(false);
+    }
   };
 
-  const addUserData = (practitionerData: PractitionerPayload) => {
-    addPractitioner(practitionerData).then(
-      () => {
-        fetchUserData();
-        toast.success('Practitioner added successfully');
-      },
-      (e) => {
-        console.log(e);
-        toast.error('Practitioner could not be added');
-      }
-    );
+  const addUserData = async (practitionerData: PractitionerPayload) => {
+    try {
+      await addPractitioner(practitionerData);
+      await fetchUserData();
+      toast.success('Practitioner added successfully');
+    } catch (error) {
+      toast.error('Practitioner could not be added');
+    }
   };
 
   const editUserData = (id: number) => {
@@ -59,18 +55,17 @@ const PractitionerListTable = (props: PractitionerListTableProps) => {
     }
   };
 
-  const handleUserEdit = (userData: PractitionerPayload, id: number | undefined) => {
+  const handleUserEdit = async (userData: PractitionerPayload, id: number | undefined) => {
     if (id) {
-      editPractitioner(userData, id).then(
-        () => {
-          fetchUserData();
-          toast.success('Practitioner edited successfully');
-        },
-        (e) => {
-          console.log(e);
-          toast.error('Practitioner could not be edited');
-        }
-      );
+      try {
+        await editPractitioner(userData, id);
+        await fetchUserData();
+        toast.success('Practitioner edited successfully');
+      } catch (error) {
+        toast.error('Practitioner could not be edited');
+      }
+    } else {
+      toast.error('Practitioner id not found.');
     }
   };
 
